@@ -1,114 +1,112 @@
-
-var canvas;
-var ctx;
-var FPS = 50;
+var canvasA, canvasB;
+var ctxA, ctxB;
 
 // Tablero del juego
-var columnas = 50;
-var filas = 50;
+var columnas;
+var filas;
 var escenario; // Matriz de columnas x filas
 
-// Cuadricula
-
-var anchoF;
-var altoF;
+// Tamaño de cada celda
+const cellSize = 10; // Puedes ajustar este valor según tus necesidades
 
 // Objetos
 const muro = "#17202a";
 const tierra = "#ecf0f1";
 
-function dibujaEscenario(f, c) {
-    var obj = new Array(f);
-    for (var i = 0; i < f; i++) {
-        obj[i] = new Array(c);
-    }
-    return obj;
+function inicializa() {
+    canvasA = document.getElementById('canvasA');
+    canvasB = document.getElementById('canvasB');
+    ctxA = canvasA.getContext('2d');
+    ctxB = canvasB.getContext('2d');
+
+    // Ajustar el tamaño de los canvas al contenedor
+    resizeCanvases();
+
+    // Calcular columnas y filas basadas en el tamaño del canvas y el tamaño de celda
+    columnas = Math.floor(canvasA.width / cellSize);
+    filas = Math.floor(canvasA.height / cellSize);
+
+    // Creamos el escenario
+    crearEscenario();
+
+    // Iniciar el bucle de renderizado
+    requestAnimationFrame(principal);
 }
 
-
-
-function casilla(x, y) {
-
-    //Posicion en el escenario
-    this.x = x;
-    this.y = y;
-
-    //Propiedades de la casilla (obstaculo, inicio, fin)
-    this.tipo = 0;
-
-    var aleatorio = Math.floor(Math.random() * 5);
-
-    if (aleatorio == 1) this.tipo = 1;
-
-    //Pesos
-    this.f = 0;  // Coste total (g + h)
-    this.g = 0;  // Pasos dados
-    this.h = 0;  // Distancia al final o Heuristica
-
-    // Vecinos
-    this.vecinos = [];
-    this.padre = null;
-
-    // Calcula los vecinos de la casilla
-    this.addVecinos = function () {
-        if (this.x > 0) this.vecinos.push(escenario[this.x - 1][this.y]);
-        if (this.x < columnas - 1) this.vecinos.push(escenario[this.x + 1][this.y]);
-        if (this.y > 0) this.vecinos.push(escenario[this.x][this.y - 1]);
-        if (this.y < filas - 1) this.vecinos.push(escenario[this.x][this.y + 1]);
-    }
-
-    this.dibuja = function () {
-        var color;
-
-        if (this.tipo == 0) color = tierra;
-        if (this.tipo == 1) color = muro;
-
-        ctx.fillStyle = color;
-        ctx.fillRect(this.x * anchoF, this.y * altoF, anchoF, altoF);
-    }
+function resizeCanvases() {
+    const containerA = canvasA.parentElement;
+    const containerB = canvasB.parentElement;
+    const size = Math.min(containerA.clientWidth, containerA.clientHeight,
+        containerB.clientWidth, containerB.clientHeight);
+    canvasA.width = canvasA.height = size;
+    canvasB.width = canvasB.height = size;
 }
 
-// Funcion inicializadora
+function crearEscenario() {
+    escenario = Array(columnas).fill().map(() => Array(filas).fill(null));
 
-window.inicializa = function () {
-    var i = 0;
-    var j = 0;
-
-    canvas = document.getElementById('canvas');
-    ctx = canvas.getContext('2d');
-
-    // Inicializar escenario
-    anchoF = parseInt(canvas.width / columnas);
-    altoF = parseInt(canvas.height / filas);
-
-    // Creamos los nodos
-    escenario = dibujaEscenario(filas, columnas);
-
-    // Añadimos las casillas al escenario
-    for (i = 0; i < columnas; i++) {
-        for (j = 0; j < filas; j++) {
-            escenario[i][j] = new casilla(i, j)
+    for (let i = 0; i < columnas; i++) {
+        for (let j = 0; j < filas; j++) {
+            escenario[i][j] = new Casilla(i, j);
         }
     }
 
-    // Bucle principal
-    setInterval(function () { principal(); }, 1000 / FPS);
-
-}
-
-
-function creaEscenario() {
-    var i = 0;
-    var j = 0;
-
-    for (i = 0; i < columnas; i++) {
-        for (j = 0; j < filas; j++) {
-            escenario[i][j].dibuja();
+    // Añadir vecinos
+    for (let i = 0; i < columnas; i++) {
+        for (let j = 0; j < filas; j++) {
+            escenario[i][j].addVecinos();
         }
     }
 }
 
+class Casilla {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.tipo = Math.random() < 0.2 ? 1 : 0; // 20% de probabilidad de ser muro
+        this.f = 0;
+        this.g = 0;
+        this.h = 0;
+        this.vecinos = [];
+        this.padre = null;
+    }
+
+    addVecinos() {
+        const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+        for (let [dx, dy] of dirs) {
+            const newX = this.x + dx;
+            const newY = this.y + dy;
+            if (newX >= 0 && newX < columnas && newY >= 0 && newY < filas) {
+                this.vecinos.push(escenario[newX][newY]);
+            }
+        }
+    }
+
+    dibuja(ctx) {
+        ctx.fillStyle = this.tipo === 0 ? tierra : muro;
+        ctx.fillRect(this.x * cellSize, this.y * cellSize, cellSize, cellSize);
+    }
+}
+
+function dibujaEscenario() {
+    for (let i = 0; i < columnas; i++) {
+        for (let j = 0; j < filas; j++) {
+            escenario[i][j].dibuja(ctxA);
+            escenario[i][j].dibuja(ctxB);
+        }
+    }
+}
 
 function principal() {
-    creaEscenario();
+    dibujaEscenario();
+    requestAnimationFrame(principal);
 }
+
+// Ejecutar la inicialización cuando la ventana haya cargado
+window.onload = inicializa;
+
+// Redimensionar los canvas cuando se cambie el tamaño de la ventana
+window.onresize = function () {
+    resizeCanvases();
+    crearEscenario(); // Reinicializar el escenario con el nuevo tamaño
+};
