@@ -1,0 +1,91 @@
+---
+// Component.astro
+---
+
+<div class="w-full flex flex-col items-center">
+  <section class="py-12 md:py-16 lg:py-20 text-center">
+    <div class="container px-4 md:px-6">
+      <div class="space-y-4">
+        <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+          Comparing Pathfinding Algorithms
+        </h1>
+        <p
+          class="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed"
+        >
+          Explore the performance and characteristics of the A* and Dijkstra
+          algorithms in a visual comparison.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section
+    class="w-full max-w-4xl grid gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-12"
+  >
+    <div class="relative h-[400px] overflow-hidden rounded bg-muted/40">
+      <!-- a-star -->
+      <canvas id="canvasA" class="h-full w-full"></canvas>
+    </div>
+    <div class="relative h-[400px] overflow-hidden rounded bg-muted/40">
+      <!-- dijkstra -->
+      <canvas id="canvasB" class="h-full w-full"></canvas>
+    </div>
+  </section>
+  <section class="py-12 md:py-16 lg:py-20 w-full max-w-4xl">
+    <div class="container grid gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-12">
+      <div>
+        <h2 class="text-2xl font-bold">A* Algorithm</h2>
+        <p class="mt-4 text-muted-foreground">
+          A* is an informed search algorithm that uses a heuristic function to
+          estimate the cost of reaching the goal from a given node. It is often
+          considered the most efficient pathfinding algorithm, as it explores
+          the most promising paths first and can find the shortest path between
+          two points.
+        </p>
+        <ul class="mt-4 space-y-2 text-muted-foreground">
+          <li>
+            <span class="font-medium">Heuristic-based:</span> Uses a heuristic function
+            to estimate the cost to the goal.
+          </li>
+          <li>
+            <span class="font-medium">Efficient:</span> Explores the most promising
+            paths first, often finding the shortest path.
+          </li>
+          <li>
+            <span class="font-medium">Optimal:</span> Guarantees the shortest path
+            if the heuristic function is admissible.
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold">Dijkstra Algorithm</h2>
+        <p class="mt-4 text-muted-foreground">
+          Dijkstra's algorithm is a classic pathfinding algorithm that finds the
+          shortest path between two nodes in a graph. It explores all the
+          neighboring nodes at the present depth before moving on to the nodes
+          at the next depth level.
+        </p>
+        <ul class="mt-4 space-y-2 text-muted-foreground">
+          <li>
+            <span class="font-medium">Breadth-first search:</span> Explores all neighboring
+            nodes before moving to the next level.
+          </li>
+          <li>
+            <span class="font-medium">Optimal:</span> Guarantees the shortest path
+            in a weighted graph.
+          </li>
+          <li>
+            <span class="font-medium">Slower:</span> Can be less efficient than A*
+            for large graphs, especially when the heuristic function is well-informed.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { inicializa } from "../scripts/main.js";
+
+  // Espera a que el DOM esté listo
+  document.addEventListener("DOMContentLoaded", inicializa);
+</script>
