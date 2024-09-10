@@ -1,4 +1,3 @@
-// tablero.js
 export class Tablero {
     constructor(columnas, filas, anchoF, altoF) {
         this.columnas = columnas;
@@ -33,9 +32,11 @@ export class Tablero {
             }
         }
     }
+
+
 }
 
-class Casilla {
+export class Casilla {
     constructor(x, y) {
         this.x = x;
         this.y = y;
@@ -63,4 +64,17 @@ class Casilla {
         ctx.strokeStyle = '#ccc';
         ctx.strokeRect(this.x * anchoF, this.y * altoF, anchoF, altoF);
     }
+
+    coloreaOS = function () {
+        ctx.fillStyle = '#008000';
+        ctx.fillRect(this.x * anchoF, this.y * altoF, anchoF, altoF);
+    }
+
+    coloreaCO = function () {
+        ctx.fillStyle = '#800000';
+        ctx.fillRect(this.x * anchoF, this.y * altoF, anchoF, altoF);
+    }
+
+
+
 }

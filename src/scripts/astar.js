@@ -12,7 +12,7 @@ export class AStar {
     }
 
     buscar() {
-        while (this.openSet.length > 0) {
+        while (this.openSet.length >= 0) {
             let actual = this.openSet.reduce((min, casilla) =>
                 casilla.f < min.f ? casilla : min
             );

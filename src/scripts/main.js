@@ -1,12 +1,17 @@
-// main.js
 import { Tablero } from './tablero.js';
 import { AStar } from './astar.js';
+import { Casilla } from './tablero.js';
 
 let tablero;
 let astar;
-let principio;
-let fin;
 let ctxA, ctxB;
+var principio;
+var fin;
+var openSet = [];
+var closedSet = [];
+var camino = [];
+var terminado = false;
+
 const columnas = 50;
 const filas = 50;
 const FPS = 50;
@@ -46,36 +51,39 @@ export function inicializa() {
     // Inicializar A*
     astar = new AStar(tablero, principio, fin);
 
-    // Dibujar el tablero inicial
-    dibujarTablero();
 
     // Iniciar bucle principal
-    setInterval(principal, 1000 / FPS);
+    setInterval(function () { principal(); }, 1000 / FPS);
+
+
+
 }
+
+
+for (let i = 0; i < openSet.length; i++) {
+    openSet[i].coloreaOS();
+}
+
+
+//DIBUJA CLOSEDSET
+for (let i = 0; i < closedSet.length; i++) {
+    closedSet[i].coloreaCS();
+}
+
+
 
 function dibujarTablero() {
     tablero.dibujaEscenario(ctxA);
     tablero.dibujaEscenario(ctxB);
 }
 
-function principal() {
-    dibujarTablero();
-    const resultado = astar.buscar();
-    if (resultado) {
-        dibujarCamino(resultado);
-    }
+function borraCanvas() {
+    tablero.width = tablero.width;
+    tablero.height = tablero.height;
 }
 
-function dibujarCamino(camino) {
-    ctxA.strokeStyle = 'red';
-    ctxA.lineWidth = 2;
-    ctxA.beginPath();
-    camino.forEach((casilla, index) => {
-        if (index === 0) {
-            ctxA.moveTo(casilla.x * tablero.anchoF + tablero.anchoF / 2, casilla.y * tablero.altoF + tablero.altoF / 2);
-        } else {
-            ctxA.lineTo(casilla.x * tablero.anchoF + tablero.anchoF / 2, casilla.y * tablero.altoF + tablero.altoF / 2);
-        }
-    });
-    ctxA.stroke();
+
+function principal() {
+    borraCanvas();
+    dibujarTablero();
 }
