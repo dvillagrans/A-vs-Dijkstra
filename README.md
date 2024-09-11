@@ -1,54 +1,66 @@
-# Astro Starter Kit: Basics
+# ⚔️ A* vs Dijkstra
 
-```sh
-npm create astro@latest -- --template basics
-```
+Este repositorio contiene un proyecto de comparación entre los algoritmos de búsqueda A* y Dijkstra, implementados en JavaScript. La página permite visualizar el funcionamiento de ambos algoritmos en diferentes escenarios y comparar su eficiencia en la búsqueda de caminos óptimos. Este proyecto está diseñado para practicar habilidades de programación y algoritmos de búsqueda.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 📊 Descripción
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+Los algoritmos de búsqueda A* y Dijkstra son utilizados para encontrar el camino más corto en un grafo. A* utiliza una heurística para mejorar el tiempo de búsqueda, mientras que Dijkstra garantiza encontrar el camino más corto, pero puede ser menos eficiente en ciertos casos.
 
-## 🚀 Project Structure
+Este proyecto compara los dos algoritmos a través de una interfaz interactiva donde se pueden definir los puntos de inicio y fin, y visualizar el proceso de búsqueda en un tablero de celdas.
 
-Inside of your Astro project, you'll see the following folders and files:
+## ✅ Requisitos
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+- Implementar ambos algoritmos en JavaScript.
+- Visualizar los caminos encontrados por cada algoritmo.
+- Mostrar la eficiencia en términos de nodos visitados y tiempo de ejecución.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 🔩 Funcionamiento
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### 🌟 A* (A-Star)
 
-Any static assets, like images, can be placed in the `public/` directory.
+El algoritmo A* utiliza una función de costo que combina el costo real desde el inicio hasta un nodo y una estimación heurística del costo desde ese nodo hasta el destino.
 
-## 🧞 Commands
+- Encuentra el camino más corto utilizando la heurística de distancia Manhattan o Euclidiana.
+- Tiende a ser más rápido que Dijkstra debido a su uso de la heurística.
 
-All commands are run from the root of the project, from a terminal:
+### 🔍 Dijkstra
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+El algoritmo de Dijkstra expande todos los nodos de forma uniforme, encontrando siempre el camino más corto, sin usar ninguna heurística.
 
-## 👀 Want to learn more?
+- Ideal para grafos donde todos los caminos tienen el mismo costo.
+- Puede ser menos eficiente que A* cuando se utilizan heurísticas.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## 💻 Ejecución del proyecto
+
+1. Clona este repositorio:
+    ```sh
+    git clone https://github.com/dvillagrans/A-vs-Dijkstra.git
+    ```
+2. Abre el archivo `index.html` en tu navegador.
+3. Interactúa con el tablero para definir el punto de inicio y el destino, y selecciona qué algoritmo deseas ejecutar.
+
+## 🧠 Comparación
+
+| Algoritmo | Heurística | Tiempo de ejecución | Nodos visitados |
+| --------- | ---------- | ------------------- | --------------- |
+| A*        | Sí         | Más rápido en algunos casos | Menos nodos   |
+| Dijkstra  | No         | Más lento sin heurística   | Más nodos     |
+
+## 🚀 Tecnologías utilizadas
+
+- HTML
+- CSS
+- JavaScript
+
+## 🥸 Autor
+
+Created with ❤ by Diego Villagran
+
+<a href="https://linkedin.com/in/dvillagrans" target="_blank">
+<img src="https://img.shields.io/badge/linkedin-%231E77B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" alt="linkedin" style="margin-bottom: 5px;" />
+</a>
+<a href="https://github.com/dvillagrans" target="_blank">
+<img src="https://img.shields.io/badge/github-%2324292e.svg?&style=for-the-badge&logo=github&logoColor=white" alt="github" style="margin-bottom: 5px;" />
+</a>
+
