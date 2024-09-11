@@ -17,8 +17,8 @@ export class Tablero {
         this.addVecinos();
 
         // Asegurarse de que el inicio y el fin no sean muros
-        this.escenario[0][0].tipo = 0; // Inicio no es un muro
-        this.escenario[this.columnas - 1][this.filas - 1].tipo = 0; // Fin no es un muro
+        this.escenario[0][0].tipo = 0;
+        this.escenario[this.columnas - 1][this.filas - 1].tipo = 0;
     }
 
     addVecinos() {
@@ -43,11 +43,11 @@ export class Casilla {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.tipo = Math.random() < 0.20 ? 1 : 0;  // 15% de probabilidad de ser un muro
+        this.tipo = Math.random() < 0.20 ? 1 : 0;  // 20% de probabilidad de ser un muro
         this.vecinos = [];
         this.enOpenSet = false;
         this.enCloseSet = false;
-        this.esParteDelCamino = false;  // Nuevo: Para identificar el camino final
+        this.esParteDelCamino = false;
     }
 
     addVecinos(escenario, columnas, filas) {

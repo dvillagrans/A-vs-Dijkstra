@@ -1,9 +1,11 @@
 import { Tablero } from './tablero.js';
 import { AStar } from './astar.js';
+import { toast } from 'sonner'; // Importar toast desde Sonner
 
 let tablero;
 let astar;
 let ctxA;
+let inicio, fin;  // Definir inicio y fin como variables globales
 
 export function inicializa() {
     const canvasA = document.getElementById('canvasA');
@@ -27,8 +29,8 @@ export function inicializa() {
     tablero.inicializar();
 
     // Definir puntos de inicio y fin
-    let inicio = tablero.escenario[0][0];
-    let fin = tablero.escenario[columnas - 1][filas - 1];
+    inicio = tablero.escenario[0][0];  // Guardamos las referencias globales
+    fin = tablero.escenario[columnas - 1][filas - 1];
 
     // Inicializar A* con el tablero, inicio y fin
     astar = new AStar(tablero, inicio, fin);
@@ -38,7 +40,7 @@ export function inicializa() {
 }
 
 function animar() {
-    let pasosPorFrame = 5; // Acelera la animación haciendo 5 pasos por frame
+    let pasosPorFrame = 2; // Acelera la animación haciendo 5 pasos por frame
     for (let i = 0; i < pasosPorFrame; i++) {
         if (!astar.terminado) {
             astar.buscarUnPaso();
@@ -48,11 +50,15 @@ function animar() {
 
     if (!astar.terminado) {
         requestAnimationFrame(animar); // Continuar animación
-    } else {
+    } else if (astar.camino.length > 0) {
+        // Camino encontrado, mostrar notificación
+        toast.success('Camino encontrado');
         console.log('Animación finalizada');
+    } else {
+        // No se encontró el camino, mostrar error
+        toast.error('No se encontró un camino');
     }
 }
-
 
 function dibujarTablero() {
     const canvasA = document.getElementById('canvasA');
@@ -70,10 +76,29 @@ function dibujarTablero() {
     tablero.dibujaEscenario(ctxA); // Dibuja el escenario actualizado
 }
 
-// Añadir eventos necesarios para iniciar o reiniciar la simulación
+export function reiniciarTablero() {
+    tablero.inicializar();  // Reiniciar el escenario
 
-window.onload = function () {
+    // Redefinir inicio y fin
+    inicio = tablero.escenario[0][0];
+    fin = tablero.escenario[tablero.columnas - 1][tablero.filas - 1];
+
+    // Reiniciar el algoritmo A*
+    astar = new AStar(tablero, inicio, fin);
+
+    // Mostrar mensaje usando Sonner
+    toast.info('Tablero reiniciado. Iniciando nueva búsqueda...');
+
+    // Iniciar nueva animación
+    requestAnimationFrame(animar);
+}
+
+// Usar DOMContentLoaded para asegurarse de que el DOM esté completamente cargado
+document.addEventListener('DOMContentLoaded', () => {
     if (!tablero) {
         inicializa();
     }
-};
+
+    // Asignar la función de reiniciarTablero al botón de reinicio
+    document.getElementById('reset-btn').addEventListener('click', reiniciarTablero);
+});

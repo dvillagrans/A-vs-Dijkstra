@@ -1,5 +1,5 @@
 ---
-// Component.astro
+import { toast, Toaster } from "sonner"; // Importamos Sonner para las notificaciones
 ---
 
 <div class="w-full flex flex-col items-center">
@@ -18,18 +18,31 @@
       </div>
     </div>
   </section>
+
+  <!-- Sección de canvases para A* y Dijkstra -->
   <section
     class="w-full max-w-4xl grid gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-12"
   >
     <div class="relative h-[400px] overflow-hidden rounded bg-muted/40">
-      <!-- a-star -->
+      <!-- Canvas para A* -->
       <canvas id="canvasA" class="h-full w-full"></canvas>
     </div>
     <div class="relative h-[400px] overflow-hidden rounded bg-muted/40">
-      <!-- dijkstra -->
+      <!-- Canvas para Dijkstra -->
       <canvas id="canvasB" class="h-full w-full"></canvas>
     </div>
   </section>
+
+  <!-- Botón de reinicio -->
+  <section class="w-full max-w-4xl py-4 text-center">
+    <button
+      id="reset-btn"
+      class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >Reiniciar Tablero</button
+    >
+  </section>
+
+  <!-- Sección de descripción de algoritmos -->
   <section class="py-12 md:py-16 lg:py-20 w-full max-w-4xl">
     <div class="container grid gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-12">
       <div>
@@ -81,11 +94,31 @@
       </div>
     </div>
   </section>
+  <Toaster richColors />
 </div>
 
-<script>
-  import { inicializa } from "../scripts/main.js";
+<!-- Integración de Sonner para las notificaciones -->
+<Toaster richColors position="top-center" client:load />
 
-  // Espera a que el DOM esté listo
-  document.addEventListener("DOMContentLoaded", inicializa);
+<script>
+  import { inicializa, reiniciarTablero } from "../scripts/main.js";
+  import { toast } from "sonner";
+
+  // Verificar que el DOM está completamente cargado
+  document.addEventListener("DOMContentLoaded", () => {
+    // Inicializar la página
+    inicializa();
+
+    // Verificar que el botón de reinicio existe
+    const resetBtn = document.getElementById("reset-btn");
+    if (resetBtn) {
+      // Asignar el evento de clic al botón de reinicio
+      resetBtn.addEventListener("click", () => {
+        reiniciarTablero();
+        toast.info("Tablero reiniciado. Iniciando nueva búsqueda...");
+      });
+    } else {
+      console.error("El botón de reinicio no se encontró en el DOM.");
+    }
+  });
 </script>
