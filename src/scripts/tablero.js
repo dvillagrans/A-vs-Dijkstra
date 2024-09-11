@@ -1,4 +1,3 @@
-// tablero.js
 export class Tablero {
     constructor(columnas, filas, anchoF, altoF) {
         this.columnas = columnas;
@@ -16,6 +15,10 @@ export class Tablero {
             }
         }
         this.addVecinos();
+
+        // Asegurarse de que el inicio y el fin no sean muros
+        this.escenario[0][0].tipo = 0;
+        this.escenario[this.columnas - 1][this.filas - 1].tipo = 0;
     }
 
     addVecinos() {
@@ -35,12 +38,16 @@ export class Tablero {
     }
 }
 
-class Casilla {
+
+export class Casilla {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.tipo = Math.random() < 0.15 ? 1 : 0;  // 15% de probabilidad de ser un muro
+        this.tipo = Math.random() < 0.20 ? 1 : 0;  // 20% de probabilidad de ser un muro
         this.vecinos = [];
+        this.enOpenSet = false;
+        this.enCloseSet = false;
+        this.esParteDelCamino = false;
     }
 
     addVecinos(escenario, columnas, filas) {
@@ -58,7 +65,18 @@ class Casilla {
     }
 
     dibuja(ctx, anchoF, altoF) {
-        ctx.fillStyle = this.tipo === 0 ? '#fff' : '#000';
+        if (this.esParteDelCamino) {
+            ctx.fillStyle = '#FFFF00'; // Color amarillo para el camino final
+        } else if (this.enCloseSet) {
+            ctx.fillStyle = '#800000'; // Rojo oscuro para los visitados
+        } else if (this.enOpenSet) {
+            ctx.fillStyle = '#008000'; // Verde para los que están en openSet
+        } else if (this.tipo === 1) {
+            ctx.fillStyle = '#000'; // Negro para los muros
+        } else {
+            ctx.fillStyle = '#fff'; // Blanco para los no visitados
+        }
+
         ctx.fillRect(this.x * anchoF, this.y * altoF, anchoF, altoF);
         ctx.strokeStyle = '#ccc';
         ctx.strokeRect(this.x * anchoF, this.y * altoF, anchoF, altoF);
